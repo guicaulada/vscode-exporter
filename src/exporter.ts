@@ -219,11 +219,11 @@ export class VSCodeExporter {
     }
 
     if (lineCount > this.lastLineCount) {
-      const linesAdded = lineCount - this.lastLineCount;
+      const linesAdded = Math.max(lineCount - this.lastLineCount, 0);
       metrics.linesAdded.inc(labels, linesAdded);
       metrics.linesRemoved.dec(labels, linesAdded);
     } else if (lineCount < this.lastLineCount) {
-      const linesRemoved = this.lastLineCount - lineCount;
+      const linesRemoved = Math.max(this.lastLineCount - lineCount, 0);
       metrics.linesAdded.dec(labels, linesRemoved);
       metrics.linesRemoved.inc(labels, linesRemoved);
     }
