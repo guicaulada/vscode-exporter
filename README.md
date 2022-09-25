@@ -26,7 +26,7 @@ This extension contributes the following settings:
 * `vscode-exporter.debug`: Enable debug logs (default: false).
 * `vscode-exporter.untitled`: Show metrics for untitled files (default: false).
 * `vscode-exporter.timeout`: Time in seconds to consider idle (default: 60).
-* `vscode-exporter.min-interval`: Minimum time in seconds between metrics updates (ignored when writing files to disk) (default: 15).
+* `vscode-exporter.min-interval`: Minimum time in seconds between metrics updates (ignored when writing to disk) (default: 15).
 
 ## Extension Commands
 

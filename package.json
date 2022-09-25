@@ -61,7 +61,7 @@
         "vscode-exporter.min-interval": {
           "type": "number",
           "default": 15,
-          "description": "Minimum time in seconds between metrics updates (ignored when writing files to disk)"
+          "description": "Minimum time in seconds between metrics updates (ignored when writing to disk)"
         }
       }
     }
