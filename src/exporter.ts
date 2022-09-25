@@ -218,15 +218,8 @@ export class VSCodeExporter {
       metrics.timeSpentEditing.inc(labels, timeElapsed);
     }
 
-    if (lineCount > this.lastLineCount) {
-      const linesAdded = Math.max(lineCount - this.lastLineCount, 0);
-      metrics.linesAdded.inc(labels, linesAdded);
-      metrics.linesRemoved.dec(labels, linesAdded);
-    } else if (lineCount < this.lastLineCount) {
-      const linesRemoved = Math.max(this.lastLineCount - lineCount, 0);
-      metrics.linesAdded.dec(labels, linesRemoved);
-      metrics.linesRemoved.inc(labels, linesRemoved);
-    }
+    const linesDelta = lineCount - this.lastLineCount;
+    metrics.linesDelta.inc(labels, linesDelta);
     if (isDebugging) {
       metrics.timeSpentDebugging.inc(labels, timeElapsed);
     }

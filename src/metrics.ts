@@ -6,15 +6,9 @@ export const lineCount = new prom.Gauge({
   labelNames: ['project', 'folder', 'file', 'extension', 'language'],
 });
 
-export const linesAdded = new prom.Gauge({
-  name: 'vscode_lines_added',
-  help: 'Lines added by project, folder, file, extension and language',
-  labelNames: ['project', 'folder', 'file', 'extension', 'language'],
-});
-
-export const linesRemoved = new prom.Gauge({
-  name: 'vscode_lines_removed',
-  help: 'Lines removed by project, folder, file, extension and language',
+export const linesDelta = new prom.Gauge({
+  name: 'vscode_lines_delta',
+  help: 'Lines delta by project, folder, file, extension and language',
   labelNames: ['project', 'folder', 'file', 'extension', 'language'],
 });
 
