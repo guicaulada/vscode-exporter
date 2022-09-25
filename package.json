@@ -3,18 +3,22 @@
   "displayName": "VSCode Exporter",
   "description": "Prometheus exporter for VSCode metrics",
   "license": "AGPL-3.0-only",
+  "version": "1.0.0",
+  "publisher": "guicaulada",
   "private": true,
   "keywords": [
     "prometheus",
     "metrics",
     "vscode"
   ],
-  "publisher": "guicaulada",
   "author": {
     "name": "Guilherme Caulada",
     "email": "guilherme.caulada@gmail.com"
   },
-  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/guicaulada/vscode-exporter.git"
+  },
   "engines": {
     "vscode": "^1.71.0"
   },
