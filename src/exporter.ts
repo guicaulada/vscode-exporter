@@ -218,8 +218,6 @@ export class VSCodeExporter {
       metrics.timeSpentEditing.inc(labels, timeElapsed);
     }
 
-    const linesDelta = lineCount - this.lastLineCount;
-    metrics.linesDelta.inc(labels, linesDelta);
     if (isDebugging) {
       metrics.timeSpentDebugging.inc(labels, timeElapsed);
     }

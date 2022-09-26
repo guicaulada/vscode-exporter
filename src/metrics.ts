@@ -6,12 +6,6 @@ export const lineCount = new prom.Gauge({
   labelNames: ['project', 'folder', 'file', 'extension', 'language'],
 });
 
-export const linesDelta = new prom.Gauge({
-  name: 'vscode_lines_delta',
-  help: 'Lines delta by project, folder, file, extension and language',
-  labelNames: ['project', 'folder', 'file', 'extension', 'language'],
-});
-
 export const timeSpentEditing = new prom.Counter({
   name: 'vscode_editing_seconds',
   help: 'Time spent editing files by project, folder, file, extension and language in seconds',
