@@ -8,7 +8,6 @@ This extension exposes the following custom metrics on the `/metrics` endpoint:
 
 ```text
 vscode_lines_total{project,folder,file,extension,language} gauge
-vscode_lines_delta{project,folder,file,extension,language} gauge
 vscode_editing_seconds{project,folder,file,extension,language} counter
 vscode_debugging_seconds{project,folder,file,extension,language} counter
 vscode_compiling_seconds{project,folder,file,extension,language} counter
