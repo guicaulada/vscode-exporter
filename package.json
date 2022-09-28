@@ -44,7 +44,7 @@
       "properties": {
         "vscode-exporter.port": {
           "type": "number",
-          "default": 9930,
+          "default": 9931,
           "description": "Port to expose metrics on"
         },
         "vscode-exporter.debug": {

@@ -8,7 +8,7 @@ import { Logger, LogLevel } from './logger';
 export class VSCodeExporter {
   private id: string = 'vscode-exporter';
 
-  private port: number = 9930;
+  private port: number = 9931;
   private debug: boolean = false;
   private untitled: boolean = false;
   private timeout: number = 60;

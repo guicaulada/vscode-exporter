@@ -20,7 +20,7 @@ All the default metrics recommended by Prometheus [itself](https://prometheus.io
 
 This extension contributes the following settings:
 
-* `vscode-exporter.port`: Port to expose metrics on (default: 9930).
+* `vscode-exporter.port`: Port to expose metrics on (default: 9931).
 * `vscode-exporter.debug`: Enable debug logs (default: false).
 * `vscode-exporter.untitled`: Show metrics for untitled files (default: false).
 * `vscode-exporter.timeout`: Time in seconds to consider idle (default: 60).
