@@ -7,6 +7,7 @@ import { Logger, LogLevel } from './logger';
 
 export class VSCodeExporter {
   private id: string = 'vscode-exporter';
+  private configId: string = 'VSCodeExporter';
 
   private port: number = 9931;
   private debug: boolean = false;
@@ -36,16 +37,16 @@ export class VSCodeExporter {
 
   constructor(logger: Logger) {
     this.logger = logger;
-    this.config = vscode.workspace.getConfiguration(this.id);
+    this.config = vscode.workspace.getConfiguration(this.configId);
   }
 
   public initialize(): void {
     this.logger.info('initializing');
     this.port = this.config.get('port', this.port);
-    this.debug = this.config.get('debug', this.debug);
-    this.untitled = this.config.get('untitled', this.debug);
-    this.timeout = this.config.get('timeout', this.timeout);
-    this.interval = this.config.get('min-interval', this.interval);
+    this.debug = this.config.get('debugLogs', this.debug);
+    this.untitled = this.config.get('untitledFiles', this.debug);
+    this.timeout = this.config.get('idleTimeout', this.timeout);
+    this.interval = this.config.get('minimumInterval', this.interval);
     if (this.debug) {
       this.logger.setLevel(LogLevel.DEBUG);
     }
