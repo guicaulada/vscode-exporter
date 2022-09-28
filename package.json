@@ -42,27 +42,27 @@
     "configuration": {
       "title": "VSCode Exporter",
       "properties": {
-        "vscode-exporter.port": {
+        "VSCodeExporter.port": {
           "type": "number",
           "default": 9931,
-          "description": "Port to expose metrics on"
+          "description": "Metrics HTTP server port"
         },
-        "vscode-exporter.debug": {
+        "VSCodeExporter.debugLogs": {
           "type": "boolean",
           "default": false,
           "description": "Enable debug logs"
         },
-        "vscode-exporter.untitled": {
+        "VSCodeExporter.untitledFiles": {
           "type": "boolean",
           "default": false,
-          "description": "Show metrics for untitled files"
+          "description": "Consider untitled files when retrieving metrics"
         },
-        "vscode-exporter.timeout": {
+        "VSCodeExporter.idleTimeout": {
           "type": "number",
-          "default": 60,
-          "description": "Time in seconds to consider idle"
+          "default": 120,
+          "description": "Time in seconds before considering user as idle"
         },
-        "vscode-exporter.min-interval": {
+        "VSCodeExporter.minimumInterval": {
           "type": "number",
           "default": 15,
           "description": "Minimum time in seconds between metrics updates (ignored when writing to disk)"
