@@ -2,6 +2,8 @@
 
 Prometheus exporter for VSCode metrics using [prom-client](https://github.com/siimon/prom-client).
 
+[![Grafana dashboard](./img/dashboard.png)](https://guicaulada.grafana.net/public-dashboards/e00f2ad838544b02826e8c075c05df45?orgId=1&refresh=30s)
+
 ## Features
 
 This extension exposes the following custom metrics on the `/metrics` endpoint:
