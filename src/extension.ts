@@ -10,7 +10,7 @@ export function activate(ctx: vscode.ExtensionContext) {
   exporter = new VSCodeExporter(logger);
 
   ctx.subscriptions.push(
-    vscode.commands.registerCommand('vscode-exporter.open', function () {
+    vscode.commands.registerCommand(`${exporter.id}.open`, function () {
       exporter.openMetrics();
     }),
   );

@@ -6,7 +6,7 @@ import * as metrics from './metrics';
 import { Logger, LogLevel } from './logger';
 
 export class VSCodeExporter {
-  private id: string = 'vscode-exporter';
+  public id: string = 'vscode-exporter';
   private configId: string = 'VSCodeExporter';
 
   private port: number = 9931;
