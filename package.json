@@ -3,7 +3,7 @@
   "displayName": "VSCode Exporter",
   "description": "Prometheus exporter for VSCode metrics",
   "license": "AGPL-3.0-only",
-  "version": "2.0.7",
+  "version": "3.0.0",
   "publisher": "guicaulada",
   "private": true,
   "keywords": [
