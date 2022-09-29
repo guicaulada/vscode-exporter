@@ -51,21 +51,6 @@
           "type": "boolean",
           "default": false,
           "description": "Enable debug logs"
-        },
-        "VSCodeExporter.untitledFiles": {
-          "type": "boolean",
-          "default": false,
-          "description": "Consider untitled files when retrieving metrics"
-        },
-        "VSCodeExporter.idleTimeout": {
-          "type": "number",
-          "default": 120,
-          "description": "Time in seconds before considering user as idle"
-        },
-        "VSCodeExporter.minimumInterval": {
-          "type": "number",
-          "default": 15,
-          "description": "Minimum time in seconds between metrics updates (ignored when writing to disk)"
         }
       }
     }
