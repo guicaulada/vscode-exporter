@@ -17,6 +17,7 @@ export class VSCodeExporter {
   private config: vscode.WorkspaceConfiguration;
   private disposable?: vscode.Disposable;
   private server?: http.Server;
+  private output?: vscode.OutputChannel;
 
   constructor(logger: Logger) {
     this.logger = logger;
@@ -24,6 +25,7 @@ export class VSCodeExporter {
     this.config = vscode.workspace.getConfiguration(this.configId);
     this.port = this.config.get('port', this.port);
     this.debug = this.config.get('debugLogs', this.debug);
+    this.output = vscode.window.createOutputChannel(this.id);
   }
 
   public async initialize(): Promise<void> {
@@ -42,9 +44,9 @@ export class VSCodeExporter {
     this.server?.close();
   }
 
-  public openMetrics(): void {
-    let url = `http://localhost:${this.port}/metrics`;
-    vscode.env.openExternal(vscode.Uri.parse(url));
+  public async openMetrics(): Promise<void> {
+    this.output?.show(true);
+    this.output?.replace(await prom.register.metrics());
   }
 
   private setupDebugEventListeners(): void {
@@ -64,21 +66,29 @@ export class VSCodeExporter {
     this.disposable = vscode.Disposable.from(...subscriptions);
   }
 
+  private async requestHandler(req: http.IncomingMessage, res: http.ServerResponse<http.IncomingMessage>) {
+    this.logger.debug('received request', 'url', req.url, 'method', req.method, 'address', req.socket.remoteAddress);
+    if (req.url?.endsWith('/metrics')) {
+      res.setHeader('Content-Type', prom.register.contentType);
+      res.writeHead(200);
+      return res.end(await prom.register.metrics());
+    }
+    res.setHeader('Location', '/metrics');
+    res.writeHead(302);
+    return res.end();
+  }
+
   private setupServer(): void {
-    this.server = http
-      .createServer(async (req, res) => {
-        this.logger.debug('received request', 'url', req.url, 'method', req.method, 'address', req.socket.remoteAddress);
-        if (req.url?.endsWith('/metrics')) {
-          res.setHeader('Content-Type', prom.register.contentType);
-          res.writeHead(200);
-          return res.end(await prom.register.metrics());
-        }
-        res.setHeader('Location', '/metrics');
-        res.writeHead(302);
-        return res.end();
-      })
-      .listen(this.port, () => {
-        this.logger.info('server listening', 'port', this.port);
-      });
+    vscode.window.onDidChangeWindowState((e) => {
+      if (e.focused) {
+        this.server = http.createServer(this.requestHandler.bind(this)).listen(this.port, () => {
+          this.logger.info('server listening', 'port', this.port);
+        });
+      } else {
+        this.server?.close(() => {
+          this.logger.info('window unfocused, server stopped');
+        });
+      }
+    });
   }
 }
