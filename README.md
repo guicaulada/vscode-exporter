@@ -16,17 +16,17 @@ vscode_breakpoints_enabled{session id, name, type, folder} gauge
 vscode_breakpoints_active{session id, name, type, folder} gauge
 vscode_debug_custom_events{id, name, type, folder} counter
 vscode_tasks_seconds_total{name, type, is_background} counter
-vscode_tasks_activesks {name, type, is_background} gauge
+vscode_tasks_active{name, type, is_background} gauge
 vscode_tasks_process_active{name, type, is_background} gauge
 vscode_tasks_process_total{name, type, is_background, exit_code} counter
 vscode_notebooks_seconds_active{project, folder, file, type, is_untitled} counter
-vscode_notebooks_cells {project, folder, file, type, is_untitled} gauge
+vscode_notebooks_cells{project, folder, file, type, is_untitled} gauge
 vscode_terminals_seconds_total{name, exit_code} counter
 vscode_terminals_seconds_active{name, exit_code} counter
 vscode_terminals_active {name} gauge
 vscode_editor_seconds_active{project, folder, file, language, is_untitled} counter
 vscode_characters_total{project, folder, file, language, is_untitled} gauge
-vscode_lines_totales {project, folder, file, language, is_untitled} gauge
+vscode_lines_total{project, folder, file, language, is_untitled} gauge
 vscode_editors_edits_total{project, folder, file, language, is_untitled} counter
 vscode_notebooks_edits_total{project, folder, file, language, is_untitled} counter
 vscode_notebooks_visible{project, folder, file, type, is_untitled} gauge
