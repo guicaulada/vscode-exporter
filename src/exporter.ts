@@ -81,11 +81,19 @@ export class VSCodeExporter {
   private setupServer(): void {
     vscode.window.onDidChangeWindowState((e) => {
       if (e.focused) {
-        this.server = http.createServer(this.requestHandler.bind(this)).listen(this.port, () => {
+        this.server = http.createServer(this.requestHandler.bind(this));
+        this.server.on('error', (err: any) => {
+          if (err.code === 'EADDRINUSE') {
+            this.logger.info('failed to start server retrying...');
+            this.server?.close();
+            setTimeout(() => this.server?.listen(this.port), 1000);
+          }
+        });
+        this.server.listen(this.port, () => {
           this.logger.info('server listening', 'port', this.port);
         });
-      } else {
-        this.server?.close(() => {
+      } else if (this.server && this.server.listening) {
+        this.server.close(() => {
           this.logger.info('window unfocused, server stopped');
         });
       }
