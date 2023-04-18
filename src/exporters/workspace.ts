@@ -48,8 +48,8 @@ export class WorkspaceExporter {
 
   private onDidChangeTextDocument(event: vscode.TextDocumentChangeEvent) {
     this.logger.debug('received event onDidChangeTextDocument');
-    const docuemnt = this.state.fromDocument(event.document);
-    const labels = this.state.getDocumentLabels(docuemnt);
+    const document = this.state.fromDocument(event.document);
+    const labels = this.state.getDocumentLabels(document);
     metrics.workspace.editorsContentChanges.inc(labels, event.contentChanges.length);
   }
 
