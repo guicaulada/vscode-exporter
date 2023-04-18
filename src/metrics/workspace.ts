@@ -15,7 +15,7 @@ export const notebookCellChanges = new prom.Counter({
 export const editorsContentChanges = new prom.Counter({
   name: 'vscode_editors_content_changes_total',
   help: 'Total number of content changes in editor by project, folder, file, language and if is untitled.',
-  labelNames: ['project', 'folder', 'file', 'type', 'is_untitled'],
+  labelNames: ['project', 'folder', 'file', 'type', 'language', 'is_untitled'],
 });
 
 export const foldersAdded = new prom.Counter({
