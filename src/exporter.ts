@@ -11,12 +11,14 @@ export class VSCodeExporter {
 
   private port: number = 9931;
   private debug: boolean = false;
+  private retrying: boolean = false;
+  private focused: boolean = true;
 
   private state: State;
   private logger: Logger;
   private config: vscode.WorkspaceConfiguration;
+  private server: http.Server;
   private disposable?: vscode.Disposable;
-  private server?: http.Server;
   private output?: vscode.OutputChannel;
 
   constructor(logger: Logger) {
@@ -26,6 +28,7 @@ export class VSCodeExporter {
     this.port = this.config.get('port', this.port);
     this.debug = this.config.get('debugLogs', this.debug);
     this.output = vscode.window.createOutputChannel(this.id);
+    this.server = http.createServer(this.requestHandler.bind(this));
   }
 
   public async initialize(): Promise<void> {
@@ -79,16 +82,27 @@ export class VSCodeExporter {
   }
 
   private setupServer(): void {
-    vscode.window.onDidChangeWindowState((e) => {
-      if (e.focused) {
-        this.server = http.createServer(this.requestHandler.bind(this));
-        this.server.on('error', (err: any) => {
-          if (err.code === 'EADDRINUSE') {
-            this.logger.info('failed to start server retrying...');
-            this.server?.close();
-            setTimeout(() => this.server?.listen(this.port), 1000);
+    this.server.on('error', (err: any) => {
+      if (err.code === 'EADDRINUSE' && !this.retrying) {
+        this.retrying = true;
+        this.logger.info('failed to start server retrying...');
+        setTimeout(() => {
+          this.retrying = false;
+          if (this.focused) {
+            this.server.close();
+            this.server.listen(this.port, () => {
+              this.logger.info('server listening', 'port', this.port);
+            });
+          } else {
+            this.logger.info('window unfocused, server stopped');
           }
-        });
+        }, 1000);
+      }
+    });
+
+    vscode.window.onDidChangeWindowState((e) => {
+      this.focused = e.focused;
+      if (this.focused && !this.retrying) {
         this.server.listen(this.port, () => {
           this.logger.info('server listening', 'port', this.port);
         });
