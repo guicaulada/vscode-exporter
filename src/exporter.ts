@@ -11,8 +11,6 @@ export class VSCodeExporter {
 
   private port: number = 9931;
   private debug: boolean = false;
-  private retrying: boolean = false;
-  private focused: boolean = true;
 
   private state: State;
   private logger: Logger;
@@ -37,14 +35,14 @@ export class VSCodeExporter {
       this.logger.setLevel(LogLevel.DEBUG);
     }
     prom.collectDefaultMetrics();
-    this.setupDebugEventListeners();
+    this.setupEventListeners();
     this.setupServer();
   }
 
   public dispose() {
     this.logger.info('closing exporter');
     this.disposable?.dispose();
-    this.server?.close();
+    this.server.close();
   }
 
   public async openMetrics(): Promise<void> {
@@ -52,7 +50,7 @@ export class VSCodeExporter {
     this.output?.replace(await prom.register.metrics());
   }
 
-  private setupDebugEventListeners(): void {
+  private setupEventListeners(): void {
     this.logger.info('setting up event listeners');
     let subscriptions: vscode.Disposable[] = [];
 
@@ -65,6 +63,8 @@ export class VSCodeExporter {
     subscriptions.push(taskExporter.setupEventListeners());
     subscriptions.push(windowExporter.setupEventListeners());
     subscriptions.push(workspaceExporter.setupEventListeners());
+
+    vscode.window.onDidChangeWindowState(this.onDidChangeWindowState, this, subscriptions);
 
     this.disposable = vscode.Disposable.from(...subscriptions);
   }
@@ -81,36 +81,44 @@ export class VSCodeExporter {
     return res.end();
   }
 
+  private startServer(): void {
+    this.server.listen(this.port, () => {
+      this.logger.info('server listening', 'port', this.port);
+    });
+  }
+
+  private stopServer(): void {
+    this.server.close(() => {
+      this.logger.info('server stopped');
+    });
+  }
+
+  private onDidChangeWindowState() {
+    this.logger.info('window', 'focused', vscode.window.state.focused);
+    if (vscode.window.state.focused) {
+      this.startServer();
+    } else {
+      this.stopServer();
+    }
+  }
+
   private setupServer(): void {
     this.server.on('error', (err: any) => {
-      if (err.code === 'EADDRINUSE' && !this.retrying) {
-        this.retrying = true;
-        this.logger.info('failed to start server retrying...');
-        setTimeout(() => {
-          this.retrying = false;
-          if (this.focused) {
-            this.server.close();
-            this.server.listen(this.port, () => {
-              this.logger.info('server listening', 'port', this.port);
-            });
-          } else {
-            this.logger.info('window unfocused, server stopped');
-          }
-        }, 1000);
+      if (err.code === 'EADDRINUSE') {
+        if (vscode.window.state.focused) {
+          this.logger.info('failed to start server retrying...');
+          setTimeout(() => {
+            if (vscode.window.state.focused) {
+              this.server.close();
+              this.startServer();
+            } else {
+              this.logger.info('retry stopped');
+            }
+          }, 1000);
+        }
       }
     });
 
-    vscode.window.onDidChangeWindowState((e) => {
-      this.focused = e.focused;
-      if (this.focused && !this.retrying) {
-        this.server.listen(this.port, () => {
-          this.logger.info('server listening', 'port', this.port);
-        });
-      } else if (this.server && this.server.listening) {
-        this.server.close(() => {
-          this.logger.info('window unfocused, server stopped');
-        });
-      }
-    });
+    this.startServer();
   }
 }
