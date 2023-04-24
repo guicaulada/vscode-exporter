@@ -169,6 +169,11 @@ export class WindowExporter {
       const time = Utils.getTimeSince(this.state.focus.start);
       metrics.window.focusedSecondsActive.inc({ focused }, time);
     }
+    if (!event.focused) {
+      this.onDidChangeActiveNotebookEditor();
+      this.onDidChangeActiveTerminal();
+      this.onDidChangeActiveTextEditor();
+    }
     this.state.focus.focused = event.focused;
     this.state.focus.start = Date.now();
   }
